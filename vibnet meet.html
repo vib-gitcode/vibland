@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vibnet Meeting Call Final Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #ffffff;
+        }
+
+        .call-container {
+            width: 100%;
+            max-width: 900px;
+            height: 85vh;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-area {
+            padding: 15px 20px;
+            background-color: #333;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            text-align: center;
+        }
+
+        .header-area .meeting-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .header-area input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 1em;
+            width: 150px;
+        }
+
+        .header-area button {
+            background-color: #007bff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .header-area button#createMeetingButton {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .header-area button#createMeetingButton:hover {
+            background-color: #e0a800;
+        }
+        .header-area button:hover {
+            background-color: #0056b3;
+        }
+
+        .meeting-link-display {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+        .meeting-link-display a {
+            color: #8aff8a;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .meeting-link-display a:hover {
+            text-decoration: underline;
+        }
+
+        .video-grid {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            gap: 10px;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: scaleX(-1);
+            border-radius: 8px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+            background-color: #333;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        button#hangUpButton {
+            background-color: #f44336;
+        }
+
+        button#hangUpButton:hover {
+            background-color: #da190b;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="call-container">
+        <div class="header-area">
+            <h1>Vibnet Meeting</h1>
+            <div class="meeting-controls">
+                <input type="text" id="meetingIdInput" placeholder="Enter Meeting ID" readonly>
+                <button id="joinMeetingButton">Join Meeting</button>
+                <button id="createMeetingButton">Create New Meeting</button>
+            </div>
+            <div class="meeting-link-display" id="meetingLinkDisplay">
+                Your meeting link will appear here.
+            </div>
+        </div>
+
+        <div class="video-grid">
+            <div class="video-wrapper">
+                <video id="localVideo" autoplay playsinline muted></video>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="startLocalVideoButton">Start My Video</button>
+            <button id="hangUpButton">Hang Up</button>
+        </div>
+        <p class="status-message" id="statusMessage"></p>
+    </div>
+
+    <script>
+        console.log("--- SCRIPT LOADING - TEST 1 ---"); // First diagnostic log
+
+        const localVideo = document.getElementById('localVideo');
+        const startLocalVideoButton = document.getElementById('startLocalVideoButton');
+        const hangUpButton = document.getElementById('hangUpButton');
+        const statusMessage = document.getElementById('statusMessage');
+        const meetingIdInput = document.getElementById('meetingIdInput');
+        const joinMeetingButton = document.getElementById('joinMeetingButton');
+        const createMeetingButton = document.getElementById('createMeetingButton');
+        const meetingLinkDisplay = document.getElementById('meetingLinkDisplay');
+
+        // Check if essential elements are found
+        if (!localVideo) console.error("Error: localVideo element not found!");
+        if (!startLocalVideoButton) console.error("Error: startLocalVideoButton element not found!");
+        if (!createMeetingButton) console.error("Error: createMeetingButton element not found!");
+        if (!joinMeetingButton) console.error("Error: joinMeetingButton element not found!");
+
+        let localStream;
+        let peerConnection;
+        const SIGNALING_SERVER_URL = 'ws://localhost:8080';
+        let signalingSocket;
+        let currentMeetingId = '';
+
+        function generateMeetingId() {
+            console.log("[Diagnostic] Generating new meeting ID."); // Diagnostic log
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        function initializeSignaling(meetingId) {
+            console.log(`[Diagnostic] Initializing signaling for meeting: ${meetingId}`);
+            statusMessage.textContent = `Attempting to connect to meeting "${meetingId}"...`;
+
+            setTimeout(() => {
+                statusMessage.textContent = `Joined conceptual meeting "${meetingId}". Waiting for others...`;
+                const shareableLink = window.location.origin + window.location.pathname + `?meeting=${meetingId}`;
+                meetingLinkDisplay.innerHTML = `Share this link: <a href="<span class="math-inline">\{shareableLink\}" target\="\_blank"\></span>{shareableLink}</a>`;
+            }, 1000);
+        }
+
+        // Ensure buttons exist before adding listeners
+        if (createMeetingButton) {
+            createMeetingButton.addEventListener('click', () => {
+                console.log("[Diagnostic] 'Create New Meeting' button clicked.");
+                const newId = generateMeetingId();
+                meetingIdInput.value = newId;
+                statusMessage.textContent = `New meeting ID generated: ${newId}. Click "Join Meeting" to start.`;
+                const shareableLink = window.location.origin + window.location.pathname + `?meeting=${newId}`;
+                meetingLinkDisplay.innerHTML = `Share this link: <a href="<span class="math-inline">\{shareableLink\}" target\="\_blank"\></span>{shareableLink}</a>`;
+                joinMeetingButton.disabled = false;
+            });
+        } else {
+            console.error("Error: createMeetingButton element is null, cannot attach event listener.");
+        }
+
+        if (startLocalVideoButton) {
+            startLocalVideoButton.addEventListener('click', async () => {
+                console.log("[Diagnostic] 'Start My Video' button clicked.");
+                statusMessage.textContent = 'Requesting camera and microphone access...';
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    localVideo.srcObject = localStream;
+                    statusMessage.textContent = 'Your video is live (local preview). Ready to join or create a meeting.';
+                    startLocalVideoButton.disabled = true;
+                    if (joinMeetingButton) joinMeetingButton.disabled = false;
+                    if (createMeetingButton) createMeetingButton.disabled = false;
+                    if (hangUpButton) hangUpButton.disabled = false;
+                    if (meetingIdInput) meetingIdInput.disabled = false;
+                } catch (error) {
+                    console.error('Error accessing media devices:', error);
+                    statusMessage.textContent = 'Error: Could not access camera/microphone. Please ensure permissions are granted.';
+                    if (error.name === 'NotAllowedError') {
+                        statusMessage.textContent += ' Please allow camera and microphone access.';
+                    } else if (error.name === 'NotFoundError') {
+                        statusMessage.textContent += ' No camera or microphone found.';
+                    }
+                }
+            });
+        } else {
+             console.error("Error: startLocalVideoButton element is null, cannot attach event listener.");
+        }
+
+        if (joinMeetingButton) {
+            joinMeetingButton.addEventListener('click', () => {
+                console.log("[Diagnostic] 'Join Meeting' button clicked.");
+                const meetingId = meetingIdInput.value.trim();
+                if (meetingId && localStream) {
+                    currentMeetingId = meetingId;
+                    initializeSignaling(meetingId);
+                } else if (!localStream) {
+                    statusMessage.textContent = 'Please "Start My Video" first.';
+                } else {
+                    statusMessage.textContent = 'Please enter or create a Meeting ID.';
+                }
+            });
+        } else {
+             console.error("Error: joinMeetingButton element is null, cannot attach event listener.");
+        }
+
+        if (hangUpButton) {
+            hangUpButton.addEventListener('click', () => {
+                console.log("[Diagnostic] 'Hang Up' button clicked.");
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                    localVideo.srcObject = null;
+                }
+                if (peerConnection) {
+                    peerConnection.close();
+                    peerConnection = null;
+                }
+                if (signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
+                    signalingSocket.close();
+                }
+                statusMessage.textContent = 'Call ended.';
+                if (startLocalVideoButton) startLocalVideoButton.disabled = false;
+                if (joinMeetingButton) joinMeetingButton.disabled = true;
+                if (createMeetingButton) createMeetingButton.disabled = false;
+                if (hangUpButton) hangUpButton.disabled = true;
+                if (meetingIdInput) meetingIdInput.value = '';
+                if (meetingIdInput) meetingIdInput.disabled = true;
+                if (meetingLinkDisplay) meetingLinkDisplay.textContent = 'Your meeting link will appear here.';
+            });
+        } else {
+             console.error("Error: hangUpButton element is null, cannot attach event listener.");
+        }
+
+
+        // Initialize button and input states on page load
+        if (startLocalVideoButton) startLocalVideoButton.disabled = false;
+        if (joinMeetingButton) joinMeetingButton.disabled = true;
+        if (createMeetingButton) createMeetingButton.disabled = true;
+        if (hangUpButton) hangUpButton.disabled = true;
+        if (meetingIdInput) meetingIdInput.disabled = true;
+        if (statusMessage) statusMessage.textContent = 'Click "Start My Video" to begin.';
+
+        // Check for meeting ID in URL on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const meetingIdFromUrl = urlParams.get('meeting');
+        if (meetingIdFromUrl) {
+            if (meetingIdInput) meetingIdInput.value = meetingIdFromUrl;
+            if (statusMessage) statusMessage.textContent = `Meeting ID "${meetingIdFromUrl}" found in URL. Start your video and join!`;
+            if (meetingIdInput) meetingIdInput.disabled = false;
+        }
+
+        console.log("--- SCRIPT ENDED Initial Setup - TEST 1 ---"); // Final diagnostic log
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vibnet AI Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; /* Lighter background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 700px;
+            height: 85vh;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #28a745; /* Green header for AI chat */
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: 600;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 25px;
+            overflow-y: auto;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Space between messages */
+        }
+
+        .message {
+            display: flex;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            justify-content: flex-end; /* User messages on the right */
+            margin-left: auto; /* Push to the right */
+        }
+
+        .message.ai {
+            justify-content: flex-start; /* AI messages on the left */
+            margin-right: auto; /* Push to the left */
+        }
+
+        .message-bubble {
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 1.05em;
+            line-height: 1.5;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .message.user .message-bubble {
+            background-color: #007bff; /* Blue for user */
+            color: white;
+            border-bottom-right-radius: 5px; /* Sharper corner for the user's side */
+        }
+
+        .message.ai .message-bubble {
+            background-color: #e9ecef; /* Light gray for AI */
+            color: #343a40;
+            border-bottom-left-radius: 5px; /* Sharper corner for the AI's side */
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #fcfcfc;
+        }
+
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            padding: 12px 20px;
+            border: 1px solid #ced4da;
+            border-radius: 25px;
+            font-size: 1.05em;
+            margin-right: 12px;
+            outline: none; /* Remove outline on focus */
+            transition: border-color 0.2s ease;
+        }
+
+        .chat-input input[type="text"]:focus {
+            border-color: #28a745; /* Green border on focus */
+        }
+
+        .chat-input button {
+            background-color: #28a745; /* Green send button */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-input button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            Vibnet AI Assistant
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai">
+                <div class="message-bubble">Hello! I am your Vibnet AI Assistant. How can I help you today?</div>
+            </div>
+            </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Ask me anything...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Function to add a message to the display
+        function addMessage(text, senderType) { // senderType can be 'user' or 'ai'
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', senderType);
+
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message-bubble');
+            messageBubble.textContent = text;
+
+            messageDiv.appendChild(messageBubble);
+            chatMessages.appendChild(messageDiv);
+
+            // Scroll to the bottom to show the newest message
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // --- Simulated AI Responses ---
+        // In a real application, this would be replaced by a call to an AI API.
+        function getAiResponse(userMessage) {
+            userMessage = userMessage.toLowerCase();
+            if (userMessage.includes('hello') || userMessage.includes('hi')) {
+                return "Hello there! How are you doing?";
+            } else if (userMessage.includes('how are you')) {
+                return "I'm just a program, but I'm functioning perfectly! Thanks for asking.";
+            } else if (userMessage.includes('what can you do')) {
+                return "I can answer your questions, provide information, and chat with you. What's on your mind?";
+            } else if (userMessage.includes('your name')) {
+                return "I am the Vibnet AI Assistant, designed to help you!";
+            } else if (userMessage.includes('thank you') || userMessage.includes('thanks')) {
+                return "You're welcome! Glad I could help.";
+            } else if (userMessage.includes('flappy bird')) {
+                return "Ah, Flappy Bird! A classic. Do you want to know more about the game or perhaps programming a similar one?";
+            } else if (userMessage.includes('google home')) {
+                return "Google Home is a smart speaker and smart display that uses the Google Assistant to perform actions, control smart devices, and answer questions. It integrates with many services.";
+            } else {
+                return "I'm still learning, but I'll do my best to understand! Could you rephrase that?";
+            }
+        }
+
+        // Event listener for the Send button
+        sendButton.addEventListener('click', async () => {
+            const userMessage = messageInput.value.trim();
+            if (userMessage === '') {
+                return; // Don't send empty messages
+            }
+
+            // Display user's message
+            addMessage(userMessage, 'user');
+            messageInput.value = ''; // Clear input
+
+            // Simulate AI thinking time
+            await new Promise(resolve => setTimeout

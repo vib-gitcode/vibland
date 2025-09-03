@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vibnet Store - Powered by Vibhav</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Google Sans', Arial, sans-serif; /* Using a font similar to Google's */
+            background-color: #e8f0fe; /* Light blue background, typical for Google products */
+            color: #202124; /* Dark gray text, typical for Google */
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1a73e8; /* Google blue */
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .header-logo {
+            margin-bottom: 20px;
+        }
+        .header-logo img {
+            height: 60px; /* Adjust as needed */
+        }
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 1200px;
+            margin-bottom: 50px;
+        }
+        .app-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            width: 320px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+        }
+        .app-card h2 {
+            color: #3c4043;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.6em;
+            font-weight: 500;
+        }
+        .app-card p {
+            font-size: 1em;
+            color: #5f6368;
+            margin-bottom: 20px;
+            flex-grow: 1; /* Allows description to take available space */
+        }
+        .app-card .download-btn {
+            background-color: #1a73e8; /* Google blue */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .app-card .download-btn:hover {
+            background-color: #1669c3;
+        }
+
+        .google-home-section {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .google-home-section h2 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+        .google-home-section p {
+            font-size: 1.1em;
+            color: #5f6368;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .google-home-section .learn-more-btn {
+            background-color: #fbbc05; /* Google yellow */
+            color: #202124;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .google-home-section .learn-more-btn:hover {
+            background-color: #e8b000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-logo">
+        </div>
+    <h1>Vibnet Store</h1>
+
+    <div class="app-container">
+        <div class="app-card">
+            <h2>Vibnet Game Alpha</h2>
+            <p>A fun and exciting adventure game currently in its alpha phase. Download now and give us your feedback!</p>
+            <a href="downloads/vibnet_game_alpha.zip" class="download-btn" download>Download Game</a>
+        </div>
+
+        <div class="app-card">
+            <h2>Vibnet Utility Tool</h2>
+            <p>A handy tool to help you manage your files and organize your digital life. Simple and efficient!</p>
+            <a href="downloads/vibnet_utility_tool.zip" class="download-btn" download>Download Tool</a>
+        </div>
+
+        <div class="app-card">
+            <h2>Vibnet Chat App</h2>
+            <p>Stay connected with your friends and family with the new Vibnet Chat App. Secure and fast messaging.</p>
+            <a href="downloads/vibnet_chat_app.zip" class="download-btn" download>Download Chat App</a>
+        </div>
+    </div>
+
+    <div class="google-home-section">
+        <h2>Integrate with Google Home!</h2>
+        <p>Some of our upcoming Vibnet services are designed to work seamlessly with Google Home and Google Assistant. Get ready to control your Vibnet apps with just your voice!</p>
+        <p>Stay tuned for updates on how to enable Vibnet actions on your Google Home devices. For now, enjoy our desktop and mobile downloads!</p>
+        <a href="https://assistant.google.com/" target="_blank" class="learn-more-btn">Learn More about Google Assistant</a>
+    </div>
+
+</body>
+</html>

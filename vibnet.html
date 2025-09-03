@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>vibnet newtab</title>
+    <link rel="icon" href="C:\Users\vibhav-initial\OneDrive\Documents\Pictures\Websurfer LOGO.ico" type="image/png">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Full viewport height */
+            background-color: #282c34; /* Dark background */
+            color: #f0f0f0; /* Light text */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header .logo {
+            width: 150px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #61dafb; /* A vibrant color */
+        }
+
+        .search-container {
+            display: flex;
+            width: 600px; /* Adjust width as needed */
+            max-width: 90%; /* Ensure it's responsive */
+            margin-bottom: 40px;
+        }
+
+        .search-container input[type="text"] {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border: 1px solid #444;
+            border-radius: 25px 0 0 25px;
+            font-size: 1.1em;
+            background-color: #3a3f47;
+            color: #f0f0f0;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .search-container button {
+            padding: 15px 25px;
+            border: 1px solid #444;
+            border-left: none;
+            border-radius: 0 25px 25px 0;
+            background-color: #61dafb;
+            color: #282c34;
+            font-size: 1.1em;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container button:hover {
+            background-color: #21a1f1;
+        }
+
+        .navigation-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navigation-links a {
+            color: #61dafb;
+            text-decoration: none;
+            font-size: 1.1em;
+            padding: 10px 15px;
+            border: 1px solid #61dafb;
+            border-radius: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navigation-links a:hover {
+            background-color: #61dafb;
+            color: #282c34;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="Websurfer LOGO.png" alt="VibNet Logo" class="logo">
+        <h1>VibNet</h1>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search the web or type a URL...">
+        <button onclick="performSearch()">Search</button>
+    </div>
+
+    <div class="navigation-links">
+        <a href="https://news.google.com" target="_blank">News</a>
+        <a href="https://weather.com" target="_blank">Weather</a>
+        <a href="https://outlook.live.com/mail/0/" target="_blank">outlook</a>
+        <a href="https://maps.google.com" target="_blank">Maps</a>
+        <a href="#" target="_blank">Settings</a>
+    </div>
+
+    <script>
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value;
+            if (searchTerm.trim() === '') {
+                alert('Please enter a search term or URL.');
+                return;
+            }
+
+            // Check if the input looks like a URL (very basic check)
+            if (searchTerm.includes('.') && !searchTerm.includes(' ')) {
+                // Prepend http:// if not already present
+                let url = searchTerm;
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'http://' + url;
+                }
+                window.open(url, '_blank'); // Open URL in a new tab
+            } else {
+                // Otherwise, perform a Google search
+                const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchTerm);
+                window.open(googleSearchUrl, '_blank'); // Open search results in a new tab
+            }
+        }
+
+        // Allow pressing Enter in the search bar to trigger search
+        document.getElementById('search-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+
+</body>
+</html>

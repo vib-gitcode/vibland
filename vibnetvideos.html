@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VibNet Videos - Your Daily Dose of Inspiration</title>
+    <style>
+        /* Basic CSS for layout and styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #1a1a1a; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #282828;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .header .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e60000; /* YouTube-like red */
+            text-decoration: none;
+        }
+
+        .header .search-bar {
+            display: flex;
+        }
+
+        .header .search-bar input[type="text"] {
+            padding: 10px 15px;
+            border: 1px solid #333;
+            border-radius: 20px 0 0 20px;
+            background-color: #3f3f3f;
+            color: #f0f0f0;
+            width: 400px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .header .search-bar button {
+            padding: 10px 15px;
+            border: 1px solid #333;
+            border-left: none;
+            border-radius: 0 20px 20px 0;
+            background-color: #4a4a4a;
+            color: #f0f0f0;
+            cursor: pointer;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .header .search-bar button:hover {
+            background-color: #5a5a5a;
+        }
+
+        .header .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header .user-actions a {
+            color: #f0f0f0;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .header .user-actions a:hover {
+            background-color: #333;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .main-content {
+            flex: 3; /* Main video content takes up more space */
+        }
+
+        .sidebar {
+            flex: 1; /* Sidebar takes up less space */
+            padding: 15px;
+            background-color: #282828;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Video Player Styling */
+        .video-player-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9/16 = 0.5625) */
+            height: 0;
+            overflow: hidden;
+            background-color: #000;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .video-player-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Video Details Styling */
+        .video-details h1 {
+            font-size: 28px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #f0f0f0;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .video-meta .views-date {
+            display: flex;
+            gap: 15px;
+        }
+
+        .video-meta .actions button {
+            background-color: #4a4a4a;
+            color: #f0f0f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .video-meta .actions button:hover {
+            background-color: #5a5a5a;
+        }
+
+        .channel-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .channel-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+            border: 2px solid #e60000;
+        }
+
+        .channel-info .channel-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #f0f0f0;
+        }
+
+        .channel-info .subscribers {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .video-description {
+            font-size: 15px;
+            line-height: 1.7;
+            background-color: #282828;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            white-space: pre-wrap; /* Preserves line breaks */
+        }
+
+        /* Comments Section Styling */
+        .comments-section h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+
+        .comment-input {
+            display: flex;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .comment-input img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-input input[type="text"] {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #4a4a4a;
+            border-radius: 20px;
+            background-color: #3f3f3f;
+            color: #f0f0f0;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .comment-input button {
+            background-color: #e60000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .comment-input button:hover {
+            background-color: #cc0000;
+        }
+
+        .comment-list .comment-item {
+            background-color: #282828;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comment-item .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-item .comment-header img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .comment-item .comment-header .user-name {
+            font-weight: bold;
+            color: #e60000;
+            margin-right: 10px;
+        }
+
+        .comment-item .comment-header .comment-time {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .comment-item p {
+            margin: 0;
+            color: #e0e0e0;
+        }
+
+        /* Sidebar Related Videos Styling */
+        .related-videos h3 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+
+        .related-video-item {
+            display: flex;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: inherit;
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .related-video-item:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .related-video-item img {
+            width: 160px; /* Standard thumbnail width */
+            height: 90px; /* 16:9 aspect for 160px width */
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .related-video-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .related-video-title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.3;
+            max-height: 2.6em; /* Limit to 2 lines */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #f0f0f0;
+            margin-bottom: 5px;
+        }
+
+        .related-channel-name, .related-views {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="#" class="logo">VibNet Videos</a>
+        <div class="search-bar">
+            <input type="text" placeholder="Search for videos...">
+            <button>Search</button>
+        </div>
+        <div class="user-actions">
+            <a href="#">Upload</a>
+            <a href="#">Sign In</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="video-player-wrapper">
+                <iframe src="https://www.youtube.com/embed/g2J03f1_6lI?autoplay=1&mute=1"
+                        title="VibNet Video Player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="video-details">
+                <h1>The Art of Coding: A Journey into Web Development</h1>
+                <div class="video-meta">
+                    <div class="views-date">
+                        <span class="views">1,234,567 views</span>
+                        <span class="upload-date">Uploaded 3 days ago</span>
+                    </div>
+                    <div class="actions">
+                        <button>👍 12K</button>
+                        <button>👎 200</button>
+                        <button>Share</button>
+                        <button>Download</button>
+                    </div>
+                </div>
+                <div class="channel-info">
+                    <img src="https://via.placeholder.com/50/FF6347/FFFFFF?text=VT" alt="VibNet Creator">
+                    <div>
+                        <div class="channel-name">VibNet Tech Tutorials</div>
+                        <div class="subscribers">500K subscribers</div>
+                    </div>
+                </div>
+                <div class="video-description">
+                    Welcome to VibNet Videos! In this exciting tutorial, we explore the intricate world of web development, from foundational HTML to advanced JavaScript frameworks. Join us as we unlock the secrets to building amazing web applications.
+
+                    Dive deep into:
+                    - Responsive design principles
+                    - Front-end frameworks (React, Angular, Vue)
+                    - Backend technologies (Node.js, Python)
+                    - Database integration
+
+                    Don't forget to like, comment, and subscribe for more coding content!
+                    #VibNetTech #WebDev #Coding #Programming #Tutorial
+                </div>
+            </div>
+
+            <div class="comments-section">
+                <h3>Comments <span class="comment-count">(150)</span></h3>
+                <div class="comment-input">
+                    <img src="https://via.placeholder.com/40/007bff/FFFFFF?text=U" alt="User Avatar">
+                    <input type="text" placeholder="Add a comment...">
+                    <button>Comment</button>
+                </div>
+                <div class="comment-list">
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <img src="https://via.placeholder.com/36/32CD32/FFFFFF?text=A" alt="Commenter Avatar">
+                            <span class="user-name">AwesomeCoder</span>
+                            <span class="comment-time">2 hours ago</span>
+                        </div>
+                        <p>This tutorial is incredibly helpful! Love the clear explanations and practical examples.</p>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <img src="https://via.placeholder.com/36/FFD700/000000?text=B" alt="Commenter Avatar">
+                            <span class="user-name">BuildWithBytes</span>
+                            <span class="comment-time">Yesterday</span>
+                        </div>
+                        <p>VibNet is quickly becoming my go-to for tech content. Keep up the amazing work!</p>
+                    </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="related-videos">
+                <h3>Up Next</h3>
+                <a href="#" class="related-video-item">
+                    <img src="https://img.youtube.com/vi/videoseries/default.jpg" alt="Related Video Thumbnail">
+                    <div class="related-video-details">
+                        <div class="related-video-title">Learn HTML in 10 Minutes - Quick Start Guide</div>
+                        <div class="related-channel-name">VibNet Tech Tutorials</div>
+                        <div class="related-views">50K views</div>
+                    </div>
+                </a>
+                <a href="#" class="related-video-item">
+                    <img src="https://img.youtube.com/vi/W6NZfCO5srs/hqdefault.jpg" alt="Related Video Thumbnail">
+                    <div class="related-video-details">
+                        <div class="related-video-title">CSS Flexbox Explained in 5 Minutes</div>
+                        <div class="related-channel-name">VibNet Tech Tutorials</div>
+                        <div class="related-views">80K views</div>
+                    </div>
+                </a>
+                <a href="#" class="related-video-item">
+                    <img src="https://img.youtube.com/vi/PkZNo7oigaU/hqdefault.jpg" alt="Related Video Thumbnail">
+                    <div class="related-video-details">
+                        <div class="related-video-title">JavaScript for Beginners: Complete Course</div>
+                        <div class="related-channel-name">Coding Dojo</div>
+                        <div class="related-views">2.1M views</div>
+                    </div>
+                </a>
+                <a href="#" class="related-video-item">
+                    <img src="https://img.youtube.com/vi/QxL7b-wN_6c/hqdefault.jpg" alt="Related Video Thumbnail">
+                    <div class="related-video-details">
+                        <div class="related-video-title">Build a Responsive Website with HTML & CSS</div>
+                        <div class="related-channel-name">WebMaster Pro</div>
+                        <div class="related-views">350K views</div>
+                    </div>
+                </a>
+                </div>
+        </div>
+    </div>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/xzhfEoGkuv4" title="Peppa Pig Tales 2025 🍼 EVIE PIG&#39;S ARRIVAL 💗 Baby Evie is Home! 🏠 BRAND NEW Peppa Pig Episodes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+</body>
+</html>
